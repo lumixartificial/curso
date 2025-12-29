@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumix Artificial | Curso Avançado de IA</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config for Custom Colors -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        deepBlack: '#050505',
+                        cardBlack: '#0a0a0a',
+                        neonPurple: '#9D00FF',
+                        neonFuchsia: '#FF00FF',
+                        successGreen: '#00FF9D',
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'cyber-grid': "linear-gradient(rgba(157, 0, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(157, 0, 255, 0.1) 1px, transparent 1px)",
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: white;
+        }
+
+        /* Neon Glow Effects */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.7), 0 0 20px rgba(157, 0, 255, 0.5);
+        }
+        
+        .glow-box {
+            box-shadow: 0 0 15px rgba(157, 0, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .glow-box:hover {
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), 0 0 10px rgba(157, 0, 255, 0.8);
+            border-color: #FF00FF;
+            transform: translateY(-5px);
+        }
+
+        .btn-neon {
+            background: transparent;
+            border: 2px solid #FF00FF;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+            box-shadow: 0 0 10px #FF00FF;
+            cursor: pointer;
+        }
+
+        .btn-neon:hover {
+            background: #FF00FF;
+            color: black;
+            box-shadow: 0 0 40px #FF00FF, 0 0 10px white;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #9D00FF; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF00FF; 
+        }
+
+        /* View Management Classes */
+        .view-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .view-section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        #view-login.active {
+            display: flex;
+        }
+        
+        /* Background Animation */
+        .bg-gradient-radial {
+            background: radial-gradient(circle at center, rgba(29, 0, 48, 0.8) 0%, rgba(5, 5, 5, 1) 70%);
+        }
+
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="font-montserrat antialiased selection:bg-neonFuchsia selection:text-white overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-deepBlack/90 backdrop-blur-md border-b border-white/10 h-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div class="flex items-center justify-between h-full">
+                <div class="flex items-center cursor-pointer" onclick="app.navigate('home')">
+                    <span class="font-orbitron text-2xl font-black tracking-wider text-white">
+                        LUMIX <span class="text-neonFuchsia glow-text">ARTIFICIAL</span>
+                    </span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-8" id="nav-links">
+                        <!-- Links injected by JS -->
+                    </div>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-gray-400 hover:text-white p-2">
+                        <i data-lucide="menu" class="w-8 h-8"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="hidden md:hidden bg-deepBlack border-b border-neonPurple/30" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center" id="mobile-nav-links">
+                <!-- Links injected by JS -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- VIEW: LANDING PAGE (PUBLIC) -->
+    <!-- ========================================== -->
+    <div id="view-home" class="view-section active">
+        <!-- Hero Section -->
+        <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+            <div class="absolute inset-0 z-0 bg-gradient-radial"></div>
+            <div class="absolute inset-0 z-0 grid-bg opacity-30"></div>
+            <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-neonPurple rounded-full blur-[120px] opacity-20 animate-pulse-slow"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-neonFuchsia rounded-full blur-[120px] opacity-20 animate-pulse-slow"></div>
+
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="inline-flex items-center px-4 py-2 rounded-full border border-neonPurple/50 bg-neonPurple/10 text-neonPurple mb-8 backdrop-blur-sm">
+                    <span class="flex h-2 w-2 rounded-full bg-neonFuchsia mr-2 animate-ping"></span>
+                    <span class="text-sm font-bold tracking-wide uppercase">Vagas Abertas para a Nova Turma</span>
+                </div>
+                
+                <h1 id="hero-title" class="text-5xl md:text-7xl font-orbitron font-black text-white mb-6 leading-tight">
+                    DOMINE A <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonPurple to-neonFuchsia glow-text">REVOLUÇÃO DA IA</span>
+                </h1>
+                
+                <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-300 mb-10 font-light">
+                    Torne-se um profissional do futuro. Aprenda Design 3D, Clones de Voz, Automação e Desenvolvimento Web. Fature até <span class="text-neonFuchsia font-bold">$15.000/mês</span>.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="app.navigate('login')" class="btn-neon px-8 py-4 rounded-full font-bold text-lg tracking-wider font-orbitron">
+                        QUERO ME TORNAR UM EXPERT
+                    </button>
+                    <a href="#modulos" class="px-8 py-4 rounded-full border border-gray-700 hover:border-white text-gray-300 hover:text-white transition-all font-bold text-lg flex items-center justify-center gap-2">
+                        Ver Conteúdo <i data-lucide="arrow-down" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="border-y border-white/10 bg-cardBlack/50 backdrop-blur-sm">
+            <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 gap-8 sm:grid-cols-3 text-center divide-y sm:divide-y-0 sm:divide-x divide-gray-800">
+                    <div>
+                        <div class="text-4xl font-orbitron font-bold text-neonFuchsia mb-2">+50</div>
+                        <div class="text-sm text-gray-400 uppercase tracking-widest">Ferramentas de IA</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-orbitron font-bold text-white mb-2">100%</div>
+                        <div class="text-sm text-gray-400 uppercase tracking-widest">Aulas Práticas</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-orbitron font-bold text-neonPurple mb-2">24h</div>
+                        <div class="text-sm text-gray-400 uppercase tracking-widest">Suporte Técnico</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modules Grid -->
+        <section id="modulos" class="py-24 relative bg-deepBlack">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-5xl font-orbitron font-bold mb-4">O ARSENAL <span class="text-neonPurple">COMPLETO</span></h2>
+                    <p class="text-gray-400 text-lg">Do zero ao avançado nas tecnologias mais lucrativas do mercado.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Cards -->
+                    <div class="glow-box bg-cardBlack border border-gray-800 p-8 rounded-2xl relative group">
+                        <div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity"><i data-lucide="palette" class="w-12 h-12 text-neonFuchsia"></i></div>
+                        <h3 class="text-2xl font-orbitron font-bold text-white mb-4 mt-2">Design & Branding</h3>
+                        <ul class="space-y-3 text-gray-400">
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonPurple mr-2"></i> Posts Virais para Social Media</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonPurple mr-2"></i> Criação de Logos</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonPurple mr-2"></i> Reforma de Identidade Visual</li>
+                        </ul>
+                    </div>
+                    <div class="glow-box bg-cardBlack border border-gray-800 p-8 rounded-2xl relative group">
+                        <div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity"><i data-lucide="box" class="w-12 h-12 text-neonPurple"></i></div>
+                        <h3 class="text-2xl font-orbitron font-bold text-white mb-4 mt-2">Universo 3D</h3>
+                        <ul class="space-y-3 text-gray-400">
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonFuchsia mr-2"></i> Mascotes 3D para Marcas</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonFuchsia mr-2"></i> Avatares Ultra-Realistas</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonFuchsia mr-2"></i> Animação Cinematográfica</li>
+                        </ul>
+                    </div>
+                    <div class="glow-box bg-cardBlack border border-gray-800 p-8 rounded-2xl relative group">
+                        <div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity"><i data-lucide="mic-2" class="w-12 h-12 text-neonFuchsia"></i></div>
+                        <h3 class="text-2xl font-orbitron font-bold text-white mb-4 mt-2">Áudio Studio IA</h3>
+                        <ul class="space-y-3 text-gray-400">
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonPurple mr-2"></i> Clonagem de Voz Perfeita</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonPurple mr-2"></i> Criação de Música Original</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonPurple mr-2"></i> Efeitos Sonoros</li>
+                        </ul>
+                    </div>
+                    <div class="glow-box bg-cardBlack border border-gray-800 p-8 rounded-2xl relative group">
+                        <div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity"><i data-lucide="laptop" class="w-12 h-12 text-neonPurple"></i></div>
+                        <h3 class="text-2xl font-orbitron font-bold text-white mb-4 mt-2">Web & Sistemas</h3>
+                        <ul class="space-y-3 text-gray-400">
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonFuchsia mr-2"></i> Landing Pages de Alta Conversão</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonFuchsia mr-2"></i> Desenvolvimento de Apps (No-Code)</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonFuchsia mr-2"></i> Sistemas SaaS com IA</li>
+                        </ul>
+                    </div>
+                    <div class="glow-box bg-cardBlack border border-gray-800 p-8 rounded-2xl relative group">
+                        <div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity"><i data-lucide="message-square" class="w-12 h-12 text-neonFuchsia"></i></div>
+                        <h3 class="text-2xl font-orbitron font-bold text-white mb-4 mt-2">Agentes WhatsApp</h3>
+                        <ul class="space-y-3 text-gray-400">
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonPurple mr-2"></i> Chatbots Humanizados</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonPurple mr-2"></i> Automação de Vendas 24/7</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-neonPurple mr-2"></i> Integração com CRM</li>
+                        </ul>
+                    </div>
+                    <div class="glow-box bg-gradient-to-br from-cardBlack to-neonPurple/10 border border-gray-800 p-8 rounded-2xl relative group">
+                         <div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity"><i data-lucide="users" class="w-12 h-12 text-white"></i></div>
+                        <h3 class="text-2xl font-orbitron font-bold text-white mb-4 mt-2">Mentoria & Suporte</h3>
+                        <ul class="space-y-3 text-gray-400">
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-white mr-2"></i> Aulas Ao Vivo + Gravadas</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-white mr-2"></i> Assistência Técnica com Professor</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-white mr-2"></i> Certificado de Conclusão</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- NEW SECTION: PROFESSIONAL PENSUM (TIMELINE) -->
+        <!-- ========================================== -->
+        <section id="pensum" class="py-24 bg-cardBlack border-t border-gray-900">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-neonFuchsia uppercase tracking-widest text-sm font-bold">Conteúdo Programático</span>
+                    <h2 class="text-3xl md:text-5xl font-orbitron font-bold mt-2 mb-4">CURRÍCULO <span class="text-neonPurple">PROFISSIONAL</span></h2>
+                    <div class="inline-flex items-center gap-6 bg-deepBlack border border-gray-800 px-8 py-3 rounded-full">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="calendar" class="text-neonFuchsia w-5 h-5"></i>
+                            <span class="text-white font-bold">24 DIAS DE IMERSÃO</span>
+                        </div>
+                        <div class="h-6 w-px bg-gray-700"></div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="clock" class="text-neonPurple w-5 h-5"></i>
+                            <span class="text-white font-bold">40 HORAS DE AULA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-neonPurple before:to-transparent">
+                    
+                    <!-- FASE 1 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border border-neonPurple bg-deepBlack shadow-[0_0_10px_#9D00FF] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
+                            <span class="font-bold text-xs text-white">01</span>
+                        </div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-deepBlack border border-gray-800 p-6 rounded-xl shadow-lg hover:border-neonPurple transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-orbitron font-bold text-white text-lg">Dias 1-6: Fundamentos da IA</h3>
+                                <span class="bg-neonPurple/20 text-neonPurple text-xs px-2 py-1 rounded font-bold">Semana 1</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-3">Dominando a engenharia de prompts e configurando seu ambiente de trabalho.</p>
+                            <ul class="text-xs text-gray-500 list-disc list-inside space-y-1">
+                                <li>Configuração Midjourney, ChatGPT, Leonardo AI</li>
+                                <li>Engenharia de Prompt Avançada</li>
+                                <li>Ética e Direitos Autorais na IA</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- FASE 2 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border border-neonFuchsia bg-deepBlack shadow-[0_0_10px_#FF00FF] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
+                            <span class="font-bold text-xs text-white">02</span>
+                        </div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-deepBlack border border-gray-800 p-6 rounded-xl shadow-lg hover:border-neonFuchsia transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-orbitron font-bold text-white text-lg">Dias 7-12: Design & Identidade</h3>
+                                <span class="bg-neonFuchsia/20 text-neonFuchsia text-xs px-2 py-1 rounded font-bold">Semana 2</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-3">Criação visual de alto impacto. Logos, posts e materiais publicitários.</p>
+                            <ul class="text-xs text-gray-500 list-disc list-inside space-y-1">
+                                <li>Design de Logotipos Vetoriais</li>
+                                <li>Criação de Mascotes 3D</li>
+                                <li>Posts Virais e Identidade Visual</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- FASE 3 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border border-neonPurple bg-deepBlack shadow-[0_0_10px_#9D00FF] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
+                            <span class="font-bold text-xs text-white">03</span>
+                        </div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-deepBlack border border-gray-800 p-6 rounded-xl shadow-lg hover:border-neonPurple transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-orbitron font-bold text-white text-lg">Dias 13-18: Áudio, Vídeo & 3D</h3>
+                                <span class="bg-neonPurple/20 text-neonPurple text-xs px-2 py-1 rounded font-bold">Semana 3</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-3">Produção multimídia completa. Animações e sonorização profissional.</p>
+                            <ul class="text-xs text-gray-500 list-disc list-inside space-y-1">
+                                <li>Clonagem de Voz e Dublagem</li>
+                                <li>Composição Musical com IA</li>
+                                <li>Animação de Vídeo e Avatares Falantes</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- FASE 4 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border border-neonFuchsia bg-deepBlack shadow-[0_0_10px_#FF00FF] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
+                            <span class="font-bold text-xs text-white">04</span>
+                        </div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-deepBlack border border-gray-800 p-6 rounded-xl shadow-lg hover:border-neonFuchsia transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-orbitron font-bold text-white text-lg">Dias 19-24: Dev & Vendas</h3>
+                                <span class="bg-neonFuchsia/20 text-neonFuchsia text-xs px-2 py-1 rounded font-bold">Semana 4</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-3">Desenvolvimento de sistemas reais e estratégias de venda high-ticket.</p>
+                            <ul class="text-xs text-gray-500 list-disc list-inside space-y-1">
+                                <li>Criação de Landing Pages e Sites</li>
+                                <li>Lógica para Apps (Uber, iFood)</li>
+                                <li>Agentes de Atendimento WhatsApp</li>
+                                <li><b>Projeto Final:</b> Lançamento da sua Agência</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Methodology Section -->
+        <section id="metodologia" class="py-24 relative bg-deepBlack border-t border-gray-900 overflow-hidden">
+             <div class="absolute inset-0 z-0 bg-gradient-radial opacity-50"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-5xl font-orbitron font-bold text-white mb-6">INTELIGÊNCIA <span class="text-neonPurple glow-text">SEM CÓDIGO</span></h2>
+                    <p class="text-xl text-gray-300">Método exclusivo para iniciantes e avançados.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                    <div><i data-lucide="brain-circuit" class="w-12 h-12 text-neonPurple mx-auto mb-4"></i><h3 class="text-xl font-bold font-orbitron mb-2">Zero Programação</h3><p class="text-gray-400">Esqueça linhas de código complexas. Use comandos de texto simples.</p></div>
+                    <div><i data-lucide="rocket" class="w-12 h-12 text-neonFuchsia mx-auto mb-4"></i><h3 class="text-xl font-bold font-orbitron mb-2">Resultados Rápidos</h3><p class="text-gray-400">Didática "Mão na Massa" para ter projetos prontos na primeira semana.</p></div>
+                    <div><i data-lucide="trophy" class="w-12 h-12 text-neonPurple mx-auto mb-4"></i><h3 class="text-xl font-bold font-orbitron mb-2">Domínio Total</h3><p class="text-gray-400">Saia com portfólio para vender serviços High-Ticket (Alto Valor).</p></div>
+                </div>
+
+                <!-- Visual Emphasis Box -->
+                <div class="mt-20 bg-gradient-to-r from-neonPurple/10 via-neonFuchsia/5 to-neonPurple/10 border border-white/10 rounded-3xl p-8 md:p-12 text-center backdrop-blur-sm relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-neonFuchsia to-transparent"></div>
+                    <h4 class="text-2xl font-orbitron font-bold text-white mb-4">"Eu preciso ser um expert em computadores?"</h4>
+                    <p class="text-4xl md:text-5xl font-black text-neonFuchsia font-orbitron tracking-widest mb-4 glow-text">NÃO!</p>
+                    <p class="text-gray-300 text-lg max-w-2xl mx-auto">A IA é a ferramenta mais democrática da história. Nós te damos o mapa e as ferramentas; você só precisa ter vontade de vencer.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="investimento" class="py-24 relative overflow-hidden">
+            <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+                <div class="bg-cardBlack/80 backdrop-blur-xl border-2 border-neonFuchsia rounded-3xl p-8 md:p-12 shadow-[0_0_50px_rgba(255,0,255,0.3)] relative">
+                    <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-neonFuchsia text-black font-bold px-6 py-2 rounded-full uppercase tracking-wider font-orbitron">Oferta Exclusiva</div>
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-8 mt-4">
+                        <div class="text-left">
+                            <p class="text-gray-400 line-through text-lg">Valor Normal: R$997</p>
+                            <span class="text-6xl font-orbitron font-black text-white">R$299</span>
+                            <p class="text-sm text-gray-400 mt-2">Acesso Vitalício</p>
+                        </div>
+                        <div class="text-left">
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-center"><i data-lucide="check-circle" class="w-5 h-5 text-neonFuchsia mr-3"></i> Acesso Imediato</li>
+                                <li class="flex items-center"><i data-lucide="check-circle" class="w-5 h-5 text-neonFuchsia mr-3"></i> Comunidade VIP</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button onclick="app.navigate('login')" class="block w-full btn-neon py-5 rounded-xl font-bold text-xl uppercase tracking-widest font-orbitron mb-4">GARANTIR MINHA VAGA AGORA</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-black border-t border-gray-900 py-12 text-center text-gray-500">
+            <p>&copy; 2025 Lumix Artificial.</p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW: LOGIN (AUTH) -->
+    <!-- ========================================== -->
+    <div id="view-login" class="view-section min-h-screen items-center justify-center relative">
+        <div class="absolute inset-0 z-0 bg-gradient-radial opacity-50"></div>
+        <div class="relative z-10 w-full max-w-md p-8 bg-cardBlack border border-neonPurple/30 rounded-2xl backdrop-blur-xl shadow-[0_0_50px_rgba(157,0,255,0.1)]">
+            <div class="text-center mb-8">
+                <span class="font-orbitron text-3xl font-black text-white">LUMIX <span class="text-neonFuchsia">ID</span></span>
+                <p class="text-gray-400 mt-2">Acesse o portal do futuro</p>
+            </div>
+            
+            <form id="login-form" onsubmit="app.handleLogin(event)" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Email de Acesso</label>
+                    <div class="relative">
+                        <i data-lucide="mail" class="absolute left-3 top-3 text-neonPurple w-5 h-5"></i>
+                        <input type="email" id="email" required class="w-full bg-deepBlack border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-neonFuchsia focus:ring-1 focus:ring-neonFuchsia transition-colors" placeholder="seu@email.com">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Senha</label>
+                    <div class="relative">
+                        <i data-lucide="lock" class="absolute left-3 top-3 text-neonPurple w-5 h-5"></i>
+                        <input type="password" id="password" required class="w-full bg-deepBlack border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-neonFuchsia focus:ring-1 focus:ring-neonFuchsia transition-colors" placeholder="••••••••">
+                    </div>
+                </div>
+                <div id="login-error" class="text-red-500 text-sm hidden text-center font-bold">Credenciais inválidas.</div>
+                <button type="submit" class="w-full btn-neon py-3 rounded-lg font-bold font-orbitron tracking-wide">ENTRAR NO SISTEMA</button>
+            </form>
+            <div class="mt-6 text-center">
+                <button onclick="app.navigate('home')" class="text-sm text-gray-500 hover:text-white transition-colors">Voltar para Home</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW: ADMIN DASHBOARD -->
+    <!-- ========================================== -->
+    <div id="view-admin" class="view-section min-h-screen pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-orbitron font-bold text-white">PAINEL <span class="text-neonFuchsia">ADMINISTRADOR</span></h2>
+                    <p class="text-gray-400">Bem-vindo, Mestre Lumix.</p>
+                </div>
+                <div class="flex gap-4">
+                     <div class="bg-cardBlack border border-neonPurple/30 px-6 py-3 rounded-xl">
+                        <span class="block text-xs text-gray-500 uppercase">Faturamento (Mês)</span>
+                        <span class="text-2xl font-orbitron text-successGreen font-bold">R$ 45.200</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Upload / Create Class -->
+                <div class="lg:col-span-2 space-y-8">
+                    <div class="bg-cardBlack border border-gray-800 p-6 rounded-2xl">
+                        <h3 class="text-xl font-orbitron font-bold text-white mb-6 flex items-center gap-2">
+                            <i data-lucide="upload-cloud" class="text-neonPurple"></i> Publicar Nova Aula
+                        </h3>
+                        <form onsubmit="app.addVideo(event)" class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm text-gray-400 mb-1">Módulo</label>
+                                    <select id="module-select" class="w-full bg-deepBlack border border-gray-700 rounded-lg p-3 text-white">
+                                        <option value="Design & Branding">Design & Branding</option>
+                                        <option value="Universo 3D">Universo 3D</option>
+                                        <option value="Áudio IA">Áudio IA</option>
+                                        <option value="Dev Web">Dev Web</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-gray-400 mb-1">Título da Aula</label>
+                                    <input type="text" id="class-title" required class="w-full bg-deepBlack border border-gray-700 rounded-lg p-3 text-white" placeholder="Ex: Criando Avatar...">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">URL do Vídeo (Embed)</label>
+                                <input type="text" id="class-url" class="w-full bg-deepBlack border border-gray-700 rounded-lg p-3 text-white" placeholder="https://youtube.com/embed/..." value="https://www.youtube.com/embed/dQw4w9WgXcQ">
+                            </div>
+                            <button type="submit" class="w-full bg-neonPurple/20 hover:bg-neonPurple text-neonPurple hover:text-white border border-neonPurple py-3 rounded-lg font-bold transition-all">
+                                PUBLICAR AULA
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Class List -->
+                    <div class="bg-cardBlack border border-gray-800 p-6 rounded-2xl">
+                        <h3 class="text-xl font-orbitron font-bold text-white mb-6">Aulas Publicadas</h3>
+                        <div id="admin-class-list" class="space-y-3">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Site Customization -->
+                <div class="space-y-8">
+                    <div class="bg-cardBlack border border-gray-800 p-6 rounded-2xl">
+                        <h3 class="text-xl font-orbitron font-bold text-white mb-6 flex items-center gap-2">
+                            <i data-lucide="settings" class="text-neonFuchsia"></i> Personalizar Site
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Título da Hero Section</label>
+                                <input type="text" id="edit-hero-title" class="w-full bg-deepBlack border border-gray-700 rounded-lg p-3 text-white text-sm" placeholder="Texto do Título...">
+                                <button onclick="app.updateSiteTitle()" class="mt-2 text-xs bg-gray-800 hover:bg-white hover:text-black px-3 py-1 rounded transition-colors">Atualizar Site</button>
+                            </div>
+                            <div class="pt-4 border-t border-gray-800">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <div class="w-10 h-6 bg-neonPurple rounded-full relative">
+                                        <div class="w-4 h-4 bg-white rounded-full absolute right-1 top-1"></div>
+                                    </div>
+                                    <span class="text-sm text-gray-300">Inscrições Abertas</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-cardBlack border border-gray-800 p-6 rounded-2xl">
+                        <h3 class="text-xl font-orbitron font-bold text-white mb-4">Novos Alunos</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-gray-700"></div>
+                                <div><p class="text-sm font-bold">Carlos Silva</p><p class="text-xs text-gray-500">Há 5 min</p></div>
+                                <span class="ml-auto text-successGreen text-xs">+R$299</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-gray-700"></div>
+                                <div><p class="text-sm font-bold">Ana Maria</p><p class="text-xs text-gray-500">Há 12 min</p></div>
+                                <span class="ml-auto text-successGreen text-xs">+R$299</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW: STUDENT DASHBOARD -->
+    <!-- ========================================== -->
+    <div id="view-student" class="view-section min-h-screen pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-8 h-[80vh]">
+                <!-- Video Player (Main) -->
+                <div class="flex-1 flex flex-col">
+                    <div class="bg-black border border-neonPurple/30 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(157,0,255,0.15)] flex-1 relative group">
+                        <iframe id="main-player" class="w-full h-full absolute inset-0" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&controls=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="mt-6">
+                        <h2 id="current-video-title" class="text-2xl font-orbitron font-bold text-white mb-2">Introdução à Inteligência Artificial</h2>
+                        <div class="flex items-center gap-4 text-sm text-gray-400">
+                            <span class="flex items-center gap-1"><i data-lucide="user" class="w-4 h-4"></i> Prof. Lumix</span>
+                            <span class="flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> 15:00 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Playlist (Sidebar) -->
+                <div class="w-full lg:w-96 flex flex-col bg-cardBlack border border-gray-800 rounded-2xl overflow-hidden">
+                    <div class="p-4 border-b border-gray-800 bg-deepBlack/50">
+                        <h3 class="font-orbitron font-bold text-white">Conteúdo do Curso</h3>
+                        <div class="w-full bg-gray-800 h-1.5 mt-2 rounded-full overflow-hidden">
+                            <div class="bg-neonFuchsia h-full w-[15%]"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">15% Concluído</p>
+                    </div>
+                    <div id="student-playlist" class="flex-1 overflow-y-auto p-2 space-y-1">
+                        <!-- Items injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // APP LOGIC
+        // ==========================================
+        const app = {
+            state: {
+                currentUser: null, // { email, role: 'admin' | 'student' }
+                currentView: 'home',
+                classes: [
+                    { id: 1, module: 'Introdução', title: 'Boas vindas ao Futuro', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', active: true },
+                    { id: 2, module: 'Design & Branding', title: 'Midjourney: Configuração Inicial', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', active: false },
+                    { id: 3, module: 'Design & Branding', title: 'Criando Logos Vetoriais', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', active: false },
+                    { id: 4, module: 'Universo 3D', title: 'Modelagem de Mascotes com IA', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', active: false },
+                ]
+            },
+
+            // Navigation Handler
+            navigate: (viewId) => {
+                // Hide all views
+                document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+                
+                // Show target view
+                document.getElementById(`view-${viewId}`).classList.add('active');
+                app.state.currentView = viewId;
+                
+                // Update Navbar
+                app.renderNavbar();
+                window.scrollTo(0,0);
+            },
+
+            // Render Navbar based on Auth State
+            renderNavbar: () => {
+                const navContainer = document.getElementById('nav-links');
+                const mobileNavContainer = document.getElementById('mobile-nav-links');
+                let html = '';
+
+                if (!app.state.currentUser) {
+                    // Public Nav
+                    html = `
+                        <a href="#modulos" onclick="app.navigate('home')" class="hover:text-neonPurple transition-colors text-sm font-medium text-gray-300">O Curso</a>
+                        <a href="#pensum" onclick="app.navigate('home')" class="hover:text-neonPurple transition-colors text-sm font-medium text-gray-300">Currículo</a>
+                        <button onclick="app.navigate('login')" class="border border-neonPurple text-neonPurple hover:bg-neonPurple hover:text-white hover:shadow-[0_0_15px_#9D00FF] transition-all px-4 py-2 rounded-full text-sm font-bold">ÁREA DO ALUNO</button>
+                    `;
+                } else {
+                    // Logged In Nav
+                    const dashboardTarget = app.state.currentUser.role === 'admin' ? 'admin' : 'student';
+                    const roleLabel = app.state.currentUser.role === 'admin' ? 'ADMIN' : 'ALUNO';
+                    
+                    html = `
+                        <span class="text-gray-500 text-sm mr-4">Olá, <span class="text-white font-bold">${app.state.currentUser.email.split('@')[0]}</span></span>
+                        <button onclick="app.navigate('${dashboardTarget}')" class="text-neonFuchsia hover:text-white transition-colors text-sm font-bold uppercase tracking-wider border-b border-transparent hover:border-neonFuchsia">Painel ${roleLabel}</button>
+                        <button onclick="app.logout()" class="text-gray-400 hover:text-white transition-colors text-sm font-medium"><i data-lucide="log-out" class="w-4 h-4 inline"></i> Sair</button>
+                    `;
+                }
+
+                navContainer.innerHTML = html;
+                mobileNavContainer.innerHTML = html.replace(/text-sm/g, 'text-base block py-2'); // Mobile adjustments
+                lucide.createIcons();
+            },
+
+            // Login Logic
+            handleLogin: (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const errorMsg = document.getElementById('login-error');
+
+                // Admin Hardcoded Check
+                if (email === 'lumixartificial@gmail.com' && password === '890921') {
+                    app.state.currentUser = { email, role: 'admin' };
+                    errorMsg.classList.add('hidden');
+                    app.initAdminPanel();
+                    app.navigate('admin');
+                } 
+                // Student Check (Mock - any other credentials work for demo)
+                else if (email && password) {
+                    app.state.currentUser = { email, role: 'student' };
+                    errorMsg.classList.add('hidden');
+                    app.initStudentPanel();
+                    app.navigate('student');
+                } else {
+                    errorMsg.classList.remove('hidden');
+                }
+                app.renderNavbar();
+            },
+
+            logout: () => {
+                app.state.currentUser = null;
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+                app.navigate('home');
+            },
+
+            // Admin Logic
+            initAdminPanel: () => {
+                const listContainer = document.getElementById('admin-class-list');
+                listContainer.innerHTML = app.state.classes.map(cls => `
+                    <div class="flex items-center justify-between bg-deepBlack border border-gray-800 p-3 rounded-lg group hover:border-neonPurple transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center text-gray-500 text-xs font-bold">${cls.id}</div>
+                            <div>
+                                <p class="text-white text-sm font-bold">${cls.title}</p>
+                                <p class="text-gray-500 text-xs">${cls.module}</p>
+                            </div>
+                        </div>
+                        <button onclick="app.deleteClass(${cls.id})" class="text-gray-600 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                `).join('');
+                
+                // Set current title in input
+                document.getElementById('edit-hero-title').value = document.getElementById('hero-title').innerText;
+                lucide.createIcons();
+            },
+
+            addVideo: (e) => {
+                e.preventDefault();
+                const title = document.getElementById('class-title').value;
+                const module = document.getElementById('module-select').value;
+                const url = document.getElementById('class-url').value;
+
+                const newClass = {
+                    id: app.state.classes.length + 1,
+                    module,
+                    title,
+                    url,
+                    active: false
+                };
+
+                app.state.classes.push(newClass);
+                app.initAdminPanel(); // Refresh list
+                e.target.reset();
+                alert('Aula publicada com sucesso!');
+            },
+
+            deleteClass: (id) => {
+                if(confirm('Tem certeza que deseja remover esta aula?')) {
+                    app.state.classes = app.state.classes.filter(c => c.id !== id);
+                    app.initAdminPanel();
+                }
+            },
+
+            updateSiteTitle: () => {
+                const newTitle = document.getElementById('edit-hero-title').value;
+                if(newTitle) {
+                    document.getElementById('hero-title').innerText = newTitle;
+                    alert('Título do site atualizado!');
+                }
+            },
+
+            // Student Logic
+            initStudentPanel: () => {
+                const playlistContainer = document.getElementById('student-playlist');
+                playlistContainer.innerHTML = app.state.classes.map(cls => `
+                    <div onclick="app.playVideo(${cls.id})" class="p-3 border-b border-gray-800 cursor-pointer hover:bg-gray-800/50 transition-colors ${cls.active ? 'bg-neonPurple/10 border-l-4 border-l-neonPurple' : ''}">
+                        <p class="text-xs text-neonFuchsia font-bold mb-1">${cls.module}</p>
+                        <h4 class="text-sm text-white font-medium flex items-start gap-2">
+                            <i data-lucide="play-circle" class="w-4 h-4 mt-0.5 shrink-0 ${cls.active ? 'text-neonPurple fill-neonPurple/20' : 'text-gray-500'}"></i>
+                            ${cls.title}
+                        </h4>
+                    </div>
+                `).join('');
+                lucide.createIcons();
+            },
+
+            playVideo: (id) => {
+                // Update State
+                app.state.classes.forEach(c => c.active = (c.id === id));
+                const selectedClass = app.state.classes.find(c => c.id === id);
+                
+                // Update DOM
+                document.getElementById('main-player').src = selectedClass.url;
+                document.getElementById('current-video-title').innerText = selectedClass.title;
+                
+                app.initStudentPanel(); // Refresh visual active state
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            app.renderNavbar();
+        });
+    </script>
+</body>
+</html>
