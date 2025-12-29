@@ -281,9 +281,7 @@
             </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- NEW SECTION: PROFESSIONAL PENSUM (TIMELINE) -->
-        <!-- ========================================== -->
+        <!-- Professional Pensum (Timeline) -->
         <section id="pensum" class="py-24 bg-cardBlack border-t border-gray-900">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
@@ -303,7 +301,6 @@
                 </div>
 
                 <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-neonPurple before:to-transparent">
-                    
                     <!-- FASE 1 -->
                     <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                         <div class="flex items-center justify-center w-10 h-10 rounded-full border border-neonPurple bg-deepBlack shadow-[0_0_10px_#9D00FF] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
@@ -322,7 +319,6 @@
                             </ul>
                         </div>
                     </div>
-
                     <!-- FASE 2 -->
                     <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                         <div class="flex items-center justify-center w-10 h-10 rounded-full border border-neonFuchsia bg-deepBlack shadow-[0_0_10px_#FF00FF] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
@@ -341,7 +337,6 @@
                             </ul>
                         </div>
                     </div>
-
                     <!-- FASE 3 -->
                     <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                         <div class="flex items-center justify-center w-10 h-10 rounded-full border border-neonPurple bg-deepBlack shadow-[0_0_10px_#9D00FF] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
@@ -360,7 +355,6 @@
                             </ul>
                         </div>
                     </div>
-
                     <!-- FASE 4 -->
                     <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                         <div class="flex items-center justify-center w-10 h-10 rounded-full border border-neonFuchsia bg-deepBlack shadow-[0_0_10px_#FF00FF] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 relative z-10">
@@ -380,7 +374,6 @@
                             </ul>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
@@ -453,8 +446,8 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-400 mb-2">Email de Acesso</label>
                     <div class="relative">
-                        <i data-lucide="mail" class="absolute left-3 top-3 text-neonPurple w-5 h-5"></i>
-                        <input type="email" id="email" required class="w-full bg-deepBlack border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-neonFuchsia focus:ring-1 focus:ring-neonFuchsia transition-colors" placeholder="seu@email.com">
+                        <i data-lucide="user" class="absolute left-3 top-3 text-neonPurple w-5 h-5"></i>
+                        <input type="text" id="email" required class="w-full bg-deepBlack border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-neonFuchsia focus:ring-1 focus:ring-neonFuchsia transition-colors" placeholder="Email ou Usuário">
                     </div>
                 </div>
                 <div>
@@ -582,30 +575,46 @@
     <div id="view-student" class="view-section min-h-screen pt-24 pb-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row gap-8 h-[80vh]">
-                <!-- Video Player (Main) -->
+                <!-- Video Player / Waiting Screen (Main) -->
                 <div class="flex-1 flex flex-col">
                     <div class="bg-black border border-neonPurple/30 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(157,0,255,0.15)] flex-1 relative group">
-                        <iframe id="main-player" class="w-full h-full absolute inset-0" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&controls=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        
+                        <!-- COMING SOON MESSAGE (Active by default for new students) -->
+                        <div id="coming-soon-message" class="absolute inset-0 flex flex-col items-center justify-center text-center p-8 bg-cardBlack z-20">
+                            <div class="w-24 h-24 bg-deepBlack border border-neonPurple rounded-full flex items-center justify-center mb-6 animate-pulse-slow shadow-[0_0_20px_#9D00FF]">
+                                <i data-lucide="calendar-clock" class="w-10 h-10 text-neonFuchsia"></i>
+                            </div>
+                            <h2 class="text-3xl md:text-4xl font-orbitron font-bold text-white mb-2">Aulas Iniciam em Breve</h2>
+                            <p class="text-neonPurple font-orbitron font-bold text-xl md:text-2xl mb-4">30 de Dezembro às 16:00</p>
+                            <div class="h-1 w-24 bg-gradient-to-r from-neonPurple to-neonFuchsia rounded-full mb-6"></div>
+                            <p class="text-gray-400 max-w-md text-sm md:text-base leading-relaxed">
+                                Estamos finalizando os últimos detalhes do seu portal. O conteúdo será liberado automaticamente aqui. Acompanhe a lista ao lado para ver a grade completa.
+                            </p>
+                        </div>
+
+                        <!-- Iframe (Hidden by default until clicked) -->
+                        <iframe id="main-player" class="w-full h-full absolute inset-0 hidden" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
+                    
                     <div class="mt-6">
-                        <h2 id="current-video-title" class="text-2xl font-orbitron font-bold text-white mb-2">Introdução à Inteligência Artificial</h2>
+                        <h2 id="current-video-title" class="text-2xl font-orbitron font-bold text-white mb-2">Bem-vindo à Lumix IA</h2>
                         <div class="flex items-center gap-4 text-sm text-gray-400">
                             <span class="flex items-center gap-1"><i data-lucide="user" class="w-4 h-4"></i> Prof. Lumix</span>
-                            <span class="flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> 15:00 min</span>
+                            <span class="flex items-center gap-1"><i data-lucide="lock" class="w-4 h-4"></i> Conteúdo Bloqueado</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Playlist (Sidebar) -->
+                <!-- Playlist (Sidebar - Locked State) -->
                 <div class="w-full lg:w-96 flex flex-col bg-cardBlack border border-gray-800 rounded-2xl overflow-hidden">
                     <div class="p-4 border-b border-gray-800 bg-deepBlack/50">
-                        <h3 class="font-orbitron font-bold text-white">Conteúdo do Curso</h3>
+                        <h3 class="font-orbitron font-bold text-white">Próximas Aulas</h3>
                         <div class="w-full bg-gray-800 h-1.5 mt-2 rounded-full overflow-hidden">
-                            <div class="bg-neonFuchsia h-full w-[15%]"></div>
+                            <div class="bg-gray-600 h-full w-[5%]"></div>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">15% Concluído</p>
+                        <p class="text-xs text-gray-500 mt-1">Aguardando Início</p>
                     </div>
-                    <div id="student-playlist" class="flex-1 overflow-y-auto p-2 space-y-1">
+                    <div id="student-playlist" class="flex-1 overflow-y-auto p-2 space-y-1 opacity-70">
                         <!-- Items injected by JS -->
                     </div>
                 </div>
@@ -622,10 +631,10 @@
                 currentUser: null, // { email, role: 'admin' | 'student' }
                 currentView: 'home',
                 classes: [
-                    { id: 1, module: 'Introdução', title: 'Boas vindas ao Futuro', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', active: true },
-                    { id: 2, module: 'Design & Branding', title: 'Midjourney: Configuração Inicial', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', active: false },
-                    { id: 3, module: 'Design & Branding', title: 'Criando Logos Vetoriais', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', active: false },
-                    { id: 4, module: 'Universo 3D', title: 'Modelagem de Mascotes com IA', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', active: false },
+                    { id: 1, module: 'Introdução', title: 'Boas vindas ao Futuro', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', active: false, locked: true },
+                    { id: 2, module: 'Design & Branding', title: 'Midjourney: Configuração Inicial', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', active: false, locked: true },
+                    { id: 3, module: 'Design & Branding', title: 'Criando Logos Vetoriais', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', active: false, locked: true },
+                    { id: 4, module: 'Universo 3D', title: 'Modelagem de Mascotes com IA', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', active: false, locked: true },
                 ]
             },
 
@@ -660,9 +669,11 @@
                     // Logged In Nav
                     const dashboardTarget = app.state.currentUser.role === 'admin' ? 'admin' : 'student';
                     const roleLabel = app.state.currentUser.role === 'admin' ? 'ADMIN' : 'ALUNO';
+                    let displayName = app.state.currentUser.email;
+                    if(displayName.includes('@')) displayName = displayName.split('@')[0];
                     
                     html = `
-                        <span class="text-gray-500 text-sm mr-4">Olá, <span class="text-white font-bold">${app.state.currentUser.email.split('@')[0]}</span></span>
+                        <span class="text-gray-500 text-sm mr-4">Olá, <span class="text-white font-bold">${displayName}</span></span>
                         <button onclick="app.navigate('${dashboardTarget}')" class="text-neonFuchsia hover:text-white transition-colors text-sm font-bold uppercase tracking-wider border-b border-transparent hover:border-neonFuchsia">Painel ${roleLabel}</button>
                         <button onclick="app.logout()" class="text-gray-400 hover:text-white transition-colors text-sm font-medium"><i data-lucide="log-out" class="w-4 h-4 inline"></i> Sair</button>
                     `;
@@ -680,16 +691,23 @@
                 const password = document.getElementById('password').value;
                 const errorMsg = document.getElementById('login-error');
 
-                // Admin Hardcoded Check
+                // Admin
                 if (email === 'lumixartificial@gmail.com' && password === '890921') {
                     app.state.currentUser = { email, role: 'admin' };
                     errorMsg.classList.add('hidden');
                     app.initAdminPanel();
                     app.navigate('admin');
                 } 
-                // Student Check (Mock - any other credentials work for demo)
-                else if (email && password) {
+                // Student (Specific User)
+                else if (email === 'usuario1649' && password === '890921') {
                     app.state.currentUser = { email, role: 'student' };
+                    errorMsg.classList.add('hidden');
+                    app.initStudentPanel();
+                    app.navigate('student');
+                }
+                // Demo Student
+                else if (email && password && email !== 'usuario1649') {
+                     app.state.currentUser = { email, role: 'student' };
                     errorMsg.classList.add('hidden');
                     app.initStudentPanel();
                     app.navigate('student');
@@ -738,7 +756,8 @@
                     module,
                     title,
                     url,
-                    active: false
+                    active: false,
+                    locked: true
                 };
 
                 app.state.classes.push(newClass);
@@ -766,27 +785,20 @@
             initStudentPanel: () => {
                 const playlistContainer = document.getElementById('student-playlist');
                 playlistContainer.innerHTML = app.state.classes.map(cls => `
-                    <div onclick="app.playVideo(${cls.id})" class="p-3 border-b border-gray-800 cursor-pointer hover:bg-gray-800/50 transition-colors ${cls.active ? 'bg-neonPurple/10 border-l-4 border-l-neonPurple' : ''}">
-                        <p class="text-xs text-neonFuchsia font-bold mb-1">${cls.module}</p>
-                        <h4 class="text-sm text-white font-medium flex items-start gap-2">
-                            <i data-lucide="play-circle" class="w-4 h-4 mt-0.5 shrink-0 ${cls.active ? 'text-neonPurple fill-neonPurple/20' : 'text-gray-500'}"></i>
+                    <div class="p-3 border-b border-gray-800 cursor-not-allowed bg-deepBlack/50 transition-colors opacity-60">
+                        <p class="text-xs text-gray-500 font-bold mb-1">${cls.module}</p>
+                        <h4 class="text-sm text-gray-400 font-medium flex items-start gap-2">
+                            <i data-lucide="lock" class="w-4 h-4 mt-0.5 shrink-0 text-gray-600"></i>
                             ${cls.title}
                         </h4>
                     </div>
                 `).join('');
                 lucide.createIcons();
             },
-
+            
+            // NOTE: playVideo is effectively disabled in this "Coming Soon" mode
             playVideo: (id) => {
-                // Update State
-                app.state.classes.forEach(c => c.active = (c.id === id));
-                const selectedClass = app.state.classes.find(c => c.id === id);
-                
-                // Update DOM
-                document.getElementById('main-player').src = selectedClass.url;
-                document.getElementById('current-video-title').innerText = selectedClass.title;
-                
-                app.initStudentPanel(); // Refresh visual active state
+               // ... logic for when unlocked
             }
         };
 
